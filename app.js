@@ -4,22 +4,18 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const setupSwagger = require('./swagger');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var usuarios = require('./routes/usuarios');
+var agendamentos = require('./routes/agendamentos');
+var servicos = require('./routes/servicos');
 var produtos = require('./routes/produtos');
+var vendas = require('./routes/vendas');
+var login = require('./routes/login');
+
 
 var app = express();
-
-// Banco de dados 
-var mysql = require('mysql');
-pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'node'
-});
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,8 +30,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/agendamentos', agendamentos);
+app.use('/usuarios', usuarios);
+app.use('/servicos', servicos);
 app.use('/produtos', produtos);
+app.use('/vendas', vendas);
+app.use('/login', login);
+
+require('dotenv').config();
+
+setupSwagger(app);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
